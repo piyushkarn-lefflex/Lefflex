@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
+import About from './pages/About';
+import UnderConstruction from './pages/Underconstruction';
 
 function App() {
   return (
     <Layout>
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/under-construction" element={<UnderConstruction />} />
+      </Routes>
     </Layout>
   );
 }

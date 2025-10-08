@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Mic, TrendingUp, Scale, Cpu, ArrowRight } from "lucide-react";
 
 export default function ServicesSection() {
@@ -55,9 +56,10 @@ export default function ServicesSection() {
         {/* Services Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((service, index) => (
-            <div
+            <Link
               key={index}
-              className="group relative bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 hover:transform hover:-translate-y-4"
+              to="/under-construction"
+              className="group relative bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 hover:transform hover:-translate-y-4 block cursor-pointer"
             >
               {/* Glowing Background Effect */}
               <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-500`}></div>
@@ -78,17 +80,17 @@ export default function ServicesSection() {
               </p>
 
               {/* Learn More Button */}
-              <button className="group/btn flex items-center gap-3 text-blue-300 hover:text-white font-semibold transition-all duration-300">
+              <div className="group/btn flex items-center gap-3 text-blue-300 hover:text-white font-semibold transition-all duration-300">
                 <span>Learn More</span>
                 <div className="w-8 h-8 rounded-full bg-white/10 group-hover/btn:bg-blue-500/20 flex items-center justify-center transition-colors">
                   <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                 </div>
-              </button>
+              </div>
 
               {/* Floating Particles */}
               <div className="absolute top-4 right-4 w-2 h-2 bg-blue-400/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="absolute bottom-4 left-4 w-1 h-1 bg-purple-400/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

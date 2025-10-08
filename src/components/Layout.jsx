@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 export default function Layout({ children }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,11 +15,21 @@ export default function Layout({ children }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  // Handle hash navigation for Services and Contact sections
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash === '#services' || hash === '#contact') {
+      // Small delay to ensure the page has loaded
+      setTimeout(() => {
+        const element = document.getElementById(hash.substring(1));
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     }
+  }, [location.pathname]);
+
+  const handleNavigation = () => {
     setIsMobileMenuOpen(false);
   };
 
@@ -39,23 +51,84 @@ export default function Layout({ children }) {
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <span className="text-3xl font-bold text-white tracking-widest hover:text-blue-300 transition-colors duration-300 cursor-pointer">
-                LEFFLEX
-              </span>
+              <Link to="/" className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80 cursor-pointer">
+                <img 
+                  src="/lefflex_logo-s.png" 
+                  alt="Lefflex Logo" 
+                  className="h-10 w-auto"
+                />
+                <span className="text-3xl font-bold text-white tracking-widest hover:text-blue-300 transition-colors duration-300">
+                  LEFFLEX
+                </span>
+              </Link>
             </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8">
-              {['Home', 'About', 'Services', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className="text-white/70 hover:text-blue-300 font-medium transition-all duration-300 relative group"
-                >
-                  {item}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-300 group-hover:w-full"></span>
-                </button>
-              ))}
+              <Link
+                to="/"
+                onClick={() => {
+                  if (location.pathname === '/') {
+                    // If already on home page, scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
+                className={`font-medium transition-all duration-300 relative group ${
+                  location.pathname === '/' ? 'text-blue-300' : 'text-white/70 hover:text-blue-300'
+                }`}
+              >
+                Home
+                <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-300 ${
+                  location.pathname === '/' ? 'w-full' : 'w-0 group-hover:w-full'
+                }`}></span>
+              </Link>
+              <Link
+                to="/about"
+                className={`font-medium transition-all duration-300 relative group ${
+                  location.pathname === '/about' ? 'text-blue-300' : 'text-white/70 hover:text-blue-300'
+                }`}
+              >
+                About
+                <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-300 ${
+                  location.pathname === '/about' ? 'w-full' : 'w-0 group-hover:w-full'
+                }`}></span>
+              </Link>
+              <button
+                onClick={() => {
+                  if (location.pathname !== '/') {
+                    // If not on home page, navigate to home first
+                    window.location.href = '/#services';
+                  } else {
+                    // If on home page, just scroll to section
+                    const element = document.getElementById('services');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }
+                }}
+                className="text-white/70 hover:text-blue-300 font-medium transition-all duration-300 relative group"
+              >
+                Services
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+              </button>
+              <button
+                onClick={() => {
+                  if (location.pathname !== '/') {
+                    // If not on home page, navigate to home first
+                    window.location.href = '/#contact';
+                  } else {
+                    // If on home page, just scroll to section
+                    const element = document.getElementById('contact');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }
+                }}
+                className="text-white/70 hover:text-blue-300 font-medium transition-all duration-300 relative group"
+              >
+                Contact
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+              </button>
             </div>
 
             {/* Mobile menu button */}
@@ -77,15 +150,66 @@ export default function Layout({ children }) {
             : 'max-h-0 opacity-0 overflow-hidden'
         } bg-black/30 backdrop-blur-xl border-t border-white/10`}>
           <div className="px-6 py-4 space-y-4">
-            {['Home', 'About', 'Services', 'Contact'].map((item) => (
-              <button
-                key={item}
-                onClick={() => scrollToSection(item.toLowerCase())}
-                className="block text-white/70 hover:text-blue-300 transition-colors duration-200 font-medium"
-              >
-                {item}
-              </button>
-            ))}
+            <Link
+              to="/"
+              onClick={() => {
+                handleNavigation();
+                if (location.pathname === '/') {
+                  // If already on home page, scroll to top
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
+              className={`block transition-colors duration-200 font-medium ${
+                location.pathname === '/' ? 'text-blue-300' : 'text-white/70 hover:text-blue-300'
+              }`}
+            >
+              Home
+            </Link>
+            <Link
+              to="/about"
+              onClick={handleNavigation}
+              className={`block transition-colors duration-200 font-medium ${
+                location.pathname === '/about' ? 'text-blue-300' : 'text-white/70 hover:text-blue-300'
+              }`}
+            >
+              About
+            </Link>
+            <button
+              onClick={() => {
+                handleNavigation();
+                if (location.pathname !== '/') {
+                  // If not on home page, navigate to home first
+                  window.location.href = '/#services';
+                } else {
+                  // If on home page, just scroll to section
+                  const element = document.getElementById('services');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }
+              }}
+              className="block text-white/70 hover:text-blue-300 transition-colors duration-200 font-medium"
+            >
+              Services
+            </button>
+            <button
+              onClick={() => {
+                handleNavigation();
+                if (location.pathname !== '/') {
+                  // If not on home page, navigate to home first
+                  window.location.href = '/#contact';
+                } else {
+                  // If on home page, just scroll to section
+                  const element = document.getElementById('contact');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }
+              }}
+              className="block text-white/70 hover:text-blue-300 transition-colors duration-200 font-medium"
+            >
+              Contact
+            </button>
           </div>
         </div>
       </nav>

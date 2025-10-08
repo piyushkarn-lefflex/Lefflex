@@ -121,15 +121,15 @@ export default function ContactSection() {
                   color: "from-blue-500 to-purple-500"
                 },
                 {
-                  icon: Phone,
-                  title: "Phone",
-                  details: "+91 000 000 0000",
+                  icon: Mail,
+                  title: "Email",
+                  details: "info@lefflex.com",
                   color: "from-purple-500 to-cyan-500"
                 },
                 {
                   icon: MapPin,
                   title: "Headquarters",
-                  details: "Somewhere in Gurugram, Haryana",
+                  details: "Palam Vihar Extension, Gurugram, Haryana",
                   color: "from-cyan-500 to-blue-500"
                 }
               ].map((item, index) => (
